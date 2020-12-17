@@ -1,6 +1,6 @@
-# vue-lib-starter
+# vue-drag-tree
 
-[文档地址](https://juejin.im/post/5d7860b0f265da03bc12a3d2)
+<!-- [文档地址](https://juejin.im/post/5d7860b0f265da03bc12a3d2) -->
 
 
 ## 安装依赖
