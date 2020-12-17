@@ -1,6 +1,6 @@
 {
-  "name": "vue-drag-tree",
-  "version": "0.0.1",
+  "name": "vue-drag-tree-org",
+  "version": "0.0.2",
   "description": "A library packaging tool based on rollup and vue-cli3",
   "private": false,
   "author": "wangdabaoqq",
@@ -18,7 +18,7 @@
   "style": "lib/theme/index.css",
   "repository": {
     "type": "git",
-    "url": ""
+    "url": "git@github.com:wangdabaoqq/vue-drag-tree.git"
   },
   "homepage": "x",
   "bugs": {
@@ -55,6 +55,7 @@
     "babel-core": "7.0.0-bridge.0",
     "babel-eslint": "^10.0.3",
     "babel-jest": "^23.6.0",
+    "babel-plugin-import": "^1.13.3",
     "babel-plugin-transform-remove-console": "^6.9.4",
     "chalk": "^2.4.2",
     "conventional-changelog-cli": "^2.0.23",
