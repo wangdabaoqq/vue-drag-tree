@@ -1,15 +1,15 @@
 <template>
   <div class="hello">
     <!-- <Row>
-      <Col :span="8">
-        <Checkbox @change="change">
-          Horizontal
-        </Checkbox>
+      <Col :span="8" />
+      <Checkbox @change="change">
+        Horizontal
+      </Checkbox>
       </Col>
-      <Col :span="8">
-        <Checkbox v-model="isExpand">
-          Expand All
-        </Checkbox>
+      <Col :span="8" />
+      <Checkbox v-model="isExpand">
+        Expand All
+      </Checkbox>
       </Col>
     </Row> -->
     <vueDragTree
@@ -102,7 +102,7 @@ export default {
     }
   },
   mounted() {
-    // console.log(this.data)
+    console.log(this.data)
   },
   methods: {
     change(val) {
