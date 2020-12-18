@@ -119,6 +119,11 @@
       "eslint --fix",
       "git add"
     ],
+    "packages/**/*.{js,jsx}": [
+      "prettier --write",
+      "eslint --fix",
+      "git add"
+    ],
     "pageages/**/*.{html,vue,css,less,scss,styl}": [
       "stylelint --fix",
       "git add"
