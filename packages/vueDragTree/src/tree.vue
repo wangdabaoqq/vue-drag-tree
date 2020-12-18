@@ -1,6 +1,6 @@
 <template>
   <div
-    class="org-tree  collapsable"
+    class="org-tree"
     :class="[
       {
         'el-tree-node--highlight-current': highlightCurrent,
@@ -514,292 +514,24 @@ export default {
 }
 </script>
 <style lang="stylus">
-
 .org-tree-container {
   display: inline-block;
   padding: 15px;
   background-color: #fff;
 }
+
 .org-tree {
   // display: inline-block;
   display: table;
   text-align: center;
 
   &:before, &:after {
-    display: table;
     content: '';
+    display: table;
   }
 
   &:after {
     clear: both;
   }
-}
-
-.org-tree-node,
-.org-tree-node-children {
-  position: relative;
-  padding: 0;
-  margin: 0;
-  list-style-type: none;
-
-  &:before, &:after {
-    transition: all .35s;
-  }
-}
-.org-tree-node-label {
-  position: relative;
-  display: inline-block;
-
-  .org-tree-node-label-inner {
-    padding: 10px 15px;
-    text-align: center;
-    border-radius: 3px;
-    box-shadow: 0 1px 5px rgba(0, 0, 0, .15);
-  }
-}
-.org-tree-node-btn {
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  z-index: 10;
-  width: 20px;
-  height: 20px;
-  margin-top: 9px;
-  margin-left: -11px;
-  cursor: pointer;
-  background-color: #fff;
-  border: 1px solid #ccc;
-  border-radius: 50%;
-  box-shadow: 0 0 2px rgba(0, 0, 0, .15);
-  transition: all .35s ease;
-
-  &:hover {
-    background-color: #e7e8e9;
-    transform: scale(1.15);
-  }
-
-  &:before, &:after {
-    position: absolute;
-    content: '';
-  }
-
-  &:before {
-    top: 50%;
-    right: 4px;
-    left: 4px;
-    height: 0;
-    border-top: 1px solid #ccc;
-  }
-
-  &:after {
-    top: 4px;
-    bottom: 4px;
-    left: 50%;
-    width: 0;
-    border-left: 1px solid #ccc;
-  }
-
-  &.expanded:after {
-    border: none;
-  }
-}
-.org-tree-node {
-  display: table-cell;
-  padding-top: 20px;
-  vertical-align: top;
-
-  &.is-leaf, &.collapsed {
-    padding-right: 10px;
-    padding-left: 10px;
-  }
-
-  &:before, &:after {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 50%;
-    height: 19px;
-    content: '';
-  }
-  &:after {
-    left: 50%;
-    border-left: 1px solid #ddd;
-  }
-
-  &:not(:first-child):before,
-  &:not(:last-child):after {
-    border-top: 1px solid #ddd;
-  }
-}
-
-.collapsable .org-tree-node.is-leaf {
-    // padding-right: 30px;
-
-    .org-tree-node-label:after {
-      top: 0;
-      left: 100%;
-      width: 20px;
-      height: 50%;
-      border-right: 0;
-      border-bottom: 0;
-    }
-  }
-.collapsable .org-tree-node.collapsed {
-  padding-bottom: 30px;
-
-  .org-tree-node-label:after {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    width: 50%;
-    height: 20px;
-    content: '';
-    // border-right: 1px solid #ddd;border-rightborder-right
-  }
-}
-.org-tree > .org-tree-node {
-  padding-top: 0;
-
-  &:after {
-    border-left: 0;
-  }
-}
-
-.org-tree-node-children {
-  display: table;
-  padding-top: 20px;
-
-  &:before {
-    position: absolute;
-    top: 0;
-    left: 50%;
-    width: 0;
-    height: 20px;
-    border-left: 1px solid #ddd;
-    content: '';
-  }
-
-  &:after {
-    display: table;
-    clear: both;
-    content: '';
-  }
-}
-
-.horizontal {
-  .org-tree-node {
-    // display: flex;
-    // flex-direction: row;
-    // justify-content: flex-start;
-    // align-items: center;
-    display: table-cell;
-    float: none;
-    padding-top: 0;
-    padding-left: 20px;
-
-    &.is-leaf, &.collapsed {
-      padding-top: 10px;
-      padding-bottom: 10px;
-    }
-    &.:only-child:before {
-     border-bottom: 0;
-    }
-    &:before, &:after {
-      width: 19px;
-      height: 50%;
-    }
-
-    &:after {
-      top: 50%;
-      left: 0;
-      border-left: 0;
-    }
-
-    &:only-child:before {
-      top: 1px;
-      border-bottom: 1px solid #ddd;
-    }
-
-    &:not(:first-child):before,
-    &:not(:last-child):after {
-      border-top: 0;
-      border-left: 1px solid #ddd;
-    }
-
-    &:not(:only-child):after {
-      border-top: 1px solid #ddd;
-    }
-
-    .org-tree-node-inner {
-      display: table;
-    }
-  }
-
-  .org-tree-node-label {
-    display: table-cell;
-    vertical-align: middle;
-  }
-
-  .org-tree-node-children.org-tree-node.is-leaf {
-    padding-right: 30px;
-
-    .org-tree-node-label:after {
-      top: 0;
-      left: 100%;
-      width: 20px;
-      height: 50%;
-      border-right: 0;
-      border-bottom: 0;
-    }
-  }
-  .org-tree-node.is-leaf {
-    padding-right: 30px;
-
-    .org-tree-node-label:after {
-      top: 0;
-      left: 100%;
-      width: 20px;
-      height: 50%;
-      border-right: 0;
-      border-bottom: 1px solid #ddd;
-    }
-  }
-
-  .org-tree-node-btn {
-    top: 50%;
-    left: 100%;
-    margin-top: -11px;
-    margin-left: 9px;
-  }
-
-  .org-tree-node-children {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: flex-start;
-    display: table-cell;
-    padding-top: 0;
-    padding-left: 20px;
-
-    &:before {
-      top: 50%;
-      left: 0;
-      width: 20px;
-      height: 0;
-      border-top: 1px solid #ddd;
-      border-left: 0;
-    }
-
-    &:after {
-      display: none;
-    }
-
-    & > .org-tree-node {
-      display: block;
-    }
-  }
-}
-.horizontal > .org-tree-node:only-child::before{
-  border-bottom 0
 }
 </style>

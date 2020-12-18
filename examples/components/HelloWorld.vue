@@ -1,16 +1,29 @@
 <template>
   <div class="hello">
+    <!-- <Row>
+      <Col :span="8">
+        <Checkbox @change="change">
+          Horizontal
+        </Checkbox>
+      </Col>
+      <Col :span="8">
+        <Checkbox v-model="isExpand">
+          Expand All
+        </Checkbox>
+      </Col>
+    </Row> -->
     <vueDragTree
       :data="data"
       :props="defaultProps"
       node-key="id"
-      direction="horizontal"
+      :default-expand-all="isExpand"
+      :direction="direction"
     >
       <span
         slot-scope="{ node, data }"
         class="org-tree-node-label"
       >
-        <span class="org-tree-node-label-inner clickable-node bg-lightpink">
+        <span class="org-tree-node-label-inner clickable-node">
           {{ data.label }}
         </span>
       </span>
@@ -19,15 +32,17 @@
 </template>
 
 <script>
-// import { Button } from 'element-ui'
+// import { Checkbox, Row, Col } from 'element-ui'
 import vueDragTree from '../../src/index'
-console.log(vueDragTree)
-// import 'element-ui/lib/theme-chalk/button.css'
+// import 'element-ui/lib/theme-chalk/index.css'
+// import 'element-ui/lib/theme-chalk/row.css'
 export default {
   name: 'HelloWorld',
   components: { vueDragTree },
   data() {
     return {
+      direction: 'Horizontal',
+      isExpand: true,
       data: [
         {
           id: 0,
@@ -87,7 +102,23 @@ export default {
     }
   },
   mounted() {
-    console.log(this.data)
+    // console.log(this.data)
+  },
+  methods: {
+    change(val) {
+      if (val) {
+        this.direction = 'horizontal'
+      } else {
+        this.direction = ''
+      }
+    },
+    changeEX(val) {
+      if (val) {
+        this.isExpand = false
+      } else {
+        this.isExpand = true
+      }
+    }
   }
 }
 </script>
