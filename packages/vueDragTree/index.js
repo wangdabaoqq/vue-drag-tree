@@ -1,20 +1,19 @@
-
-import OrgTree from './src/tree.vue'
-
-export function install (Vue) {
+import vueDragTree from './src/tree.vue'
+// import '../../lib/theme/drag-module.css'
+export function install(Vue) {
   if (install.installed) {
     return
   }
 
   install.installed = true
 
-  Vue.component(OrgTree.name, OrgTree)
+  Vue.component(vueDragTree.name, vueDragTree)
 }
 
-OrgTree.install = install
+vueDragTree.install = install
 
 if (typeof window !== 'undefined' && window.Vue) {
-  window.Vue.use(OrgTree)
+  window.Vue.use(vueDragTree)
 }
 
-export default OrgTree
+export default vueDragTree

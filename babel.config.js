@@ -4,7 +4,7 @@ var plugins = [
   [
     'import',
     {
-      libraryName: 'vue-drag-tree',
+      libraryName: 'vue-drag-tree-org',
       style: (name, file) => {
         const libDirIndex = name.lastIndexOf('/')
         const libDir = name.substring(0, libDirIndex)

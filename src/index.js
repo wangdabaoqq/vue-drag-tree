@@ -2,7 +2,7 @@
 // import TestModule from '../packages/test-module/index'
 import vueDragTree from '../packages/vueDragTree/index'
 
-import { version } from '../package.json'
+// import { version } from '../package.json'
 const components = [vueDragTree]
 const install = function(Vue) {
   // 判断是否安装
@@ -11,11 +11,10 @@ const install = function(Vue) {
   }
   components.forEach((component) => {
     Vue.component(component.name, component)
+    Vue.use(component)
   })
 }
-
 if (typeof window !== 'undefined' && window.Vue) {
   install(window.Vue)
 }
-
-export default { version, install, vueDragTree }
+export default vueDragTree

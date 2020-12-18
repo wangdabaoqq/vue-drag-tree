@@ -1,6 +1,6 @@
 {
   "name": "vue-drag-tree-org",
-  "version": "0.0.2",
+  "version": "0.0.15",
   "description": "A library packaging tool based on rollup and vue-cli3",
   "private": false,
   "author": "wangdabaoqq",
@@ -20,9 +20,9 @@
     "type": "git",
     "url": "git@github.com:wangdabaoqq/vue-drag-tree.git"
   },
-  "homepage": "x",
+  "homepage": "./",
   "bugs": {
-    "url": "x"
+    "url": "https://github.com/wangdabaoqq/vue-drag-tree/issues"
   },
   "scripts": {
     "dev": "cross-env NODE_ENV=development && vue-cli-service serve --copy",
@@ -115,11 +115,6 @@
   },
   "lint-staged": {
     "src/**/*.{js}": [
-      "prettier --write",
-      "eslint --fix",
-      "git add"
-    ],
-    "packages/**/*.{js,jsx,vue}": [
       "prettier --write",
       "eslint --fix",
       "git add"

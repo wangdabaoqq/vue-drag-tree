@@ -1,10 +1,10 @@
 <template>
   <div
-    class="org-tree-node"
-    @contextmenu="($event) => this.handleContextMenu($event)"
     v-show="node.visible"
+    ref="node"
+    class="org-tree-node"
     :class="{
-      'collapsed': !expanded,
+      collapsed: !expanded,
       'is-hidden': !node.visible,
       'is-checked': !node.disabled && node.checked,
       'is-leaf': node.isLeaf
@@ -14,25 +14,23 @@
     :aria-disabled="node.disabled"
     :aria-checked="node.checked"
     :draggable="tree.draggable"
+    @contextmenu="($event) => this.handleContextMenu($event)"
     @dragstart.stop="handleDragStart"
     @dragover.stop="handleDragOver"
     @dragend.stop="handleDragEnd"
     @drop.stop="handleDrop"
-    ref="node"
   >
-    <div class="org-tree-node-label"
-     >
+    <div class="org-tree-node-label">
       <!-- <span @click.prevent.stop="toggle" :class="['org-tree-node-btn', { 'is-leaf': node.isLeaf, expanded: !node.isLeaf && expanded }]" v-if="node.children &&  node.children.length > 0"></span> -->
       <span
-       @click.stop="handleExpandIconClick"
-        v-if="node.childNodes &&  node.childNodes.length > 0"
+        v-if="node.childNodes && node.childNodes.length > 0"
         :class="[
-        'org-tree-node-btn',
-          { 'is-leaf': node.isLeaf, 'expanded': !node.isLeaf && expanded },
+          'org-tree-node-btn',
+          { 'is-leaf': node.isLeaf, expanded: !node.isLeaf && expanded },
           'org-tree-node__expand-icon'
         ]"
-      >
-      </span>
+        @click.stop="handleExpandIconClick"
+      />
       <!-- <el-checkbox
         v-if="showCheckbox"
         v-model="node.checked"
@@ -44,238 +42,238 @@
       </el-checkbox> -->
       <span
         v-if="node.loading"
-        class="org-tree-node__loading-icon el-icon-loading">
-      </span>
-      <node-content :node="node"></node-content>
+        class="org-tree-node__loading-icon el-icon-loading"
+      />
+      <node-content :node="node" />
     </div>
     <!-- <el-collapse-transition> -->
-      <div
-        class="org-tree-node-children"
-        v-if="(!renderAfterExpand || childNodeRendered) && node.childNodes.length > 0"
-        v-show="expanded"
-        role="group"
-        :aria-expanded="expanded"
-      >
-        <el-tree-node
-          :render-content="renderContent"
-          v-for="child in node.childNodes"
-          :render-after-expand="renderAfterExpand"
-          :show-checkbox="showCheckbox"
-          :key="getNodeKey(child)"
-          :node="child"
-          @node-expand="handleChildNodeExpand">
-        </el-tree-node>
-      </div>
+    <div
+      v-if="(!renderAfterExpand || childNodeRendered) && node.childNodes.length > 0"
+      v-show="expanded"
+      class="org-tree-node-children"
+      role="group"
+      :aria-expanded="expanded"
+    >
+      <tree-node
+        v-for="child in node.childNodes"
+        :key="getNodeKey(child)"
+        :render-content="renderContent"
+        :render-after-expand="renderAfterExpand"
+        :show-checkbox="showCheckbox"
+        :node="child"
+        @node-expand="handleChildNodeExpand"
+      />
+    </div>
     <!-- </el-collapse-transition> -->
   </div>
 </template>
 
 <script type="text/jsx">
-  // import ElCollapseTransition from 'element-ui/src/transitions/collapse-transition';
-  // import ElCheckbox from 'element-ui/packages/checkbox';
-  import emitter from '../model/emiter';
-  import { getNodeKey } from '../model/util';
+// import ElCollapseTransition from 'element-ui/src/transitions/collapse-transition';
+// import ElCheckbox from 'element-ui/packages/checkbox';
+import emitter from '../model/emiter'
+import { getNodeKey } from '../model/util'
 
-  export default {
-    name: 'ElTreeNode',
+export default {
+  name: 'TreeNode',
 
-    componentName: 'ElTreeNode',
+  componentName: 'TreeNode',
 
-    mixins: [emitter],
-
-    props: {
-      node: {
-        default() {
-          return {};
+  components: {
+    // ElCollapseTransition,
+    // ElCheckbox,
+    NodeContent: {
+      props: {
+        node: {
+          required: true
         }
       },
-      props: {},
-      renderContent: Function,
-      renderAfterExpand: {
-        type: Boolean,
-        default: true
-      },
-      showCheckbox: {
-        type: Boolean,
-        default: false
-      }
-    },
-
-    components: {
-      // ElCollapseTransition,
-      // ElCheckbox,
-      NodeContent: {
-        props: {
-          node: {
-            required: true
-          }
-        },
-        render(h) {
-          const parent = this.$parent;
-          const tree = parent.tree;
-          const node = this.node;
-          const { data, store } = node;
-          return (
-            parent.renderContent
-              ? parent.renderContent.call(parent._renderProxy, h, { _self: tree.$vnode.context, node, data, store })
-              : tree.$scopedSlots.default
-                ? tree.$scopedSlots.default({ node, data })
-                : '111'
-          );
-        }
-      }
-    },
-
-    data() {
-      return {
-        tree: null,
-        expanded: false,
-        childNodeRendered: false,
-        oldChecked: null,
-        oldIndeterminate: null
-      };
-    },
-
-    watch: {
-      'node.indeterminate'(val) {
-        this.handleSelectChange(this.node.checked, val);
-      },
-
-      'node.checked'(val) {
-        this.handleSelectChange(val, this.node.indeterminate);
-      },
-
-      'node.expanded'(val) {
-        this.$nextTick(() => this.expanded = val);
-        if (val) {
-          this.childNodeRendered = true;
-        }
-      }
-    },
-
-    methods: {
-      getNodeKey(node) {
-        return getNodeKey(this.tree.nodeKey, node.data);
-      },
-
-      handleSelectChange(checked, indeterminate) {
-        if (this.oldChecked !== checked && this.oldIndeterminate !== indeterminate) {
-          this.tree.$emit('check-change', this.node.data, checked, indeterminate);
-        }
-        this.oldChecked = checked;
-        this.indeterminate = indeterminate;
-      },
-
-      handleClick() {
-        const store = this.tree.store;
-        store.setCurrentNode(this.node);
-        this.tree.$emit('current-change', store.currentNode ? store.currentNode.data : null, store.currentNode);
-        this.tree.currentNode = this;
-        if (this.tree.expandOnClickNode) {
-          this.handleExpandIconClick();
-        }
-        if (this.tree.checkOnClickNode && !this.node.disabled) {
-          this.handleCheckChange(null, {
-            target: { checked: !this.node.checked }
-          });
-        }
-        this.tree.$emit('node-click', this.node.data, this.node, this);
-      },
-
-      handleContextMenu(event) {
-        if (this.tree._events['node-contextmenu'] && this.tree._events['node-contextmenu'].length > 0) {
-          event.stopPropagation();
-          event.preventDefault();
-        }
-        this.tree.$emit('node-contextmenu', event, this.node.data, this.node, this);
-      },
-
-      handleExpandIconClick() {
-        if (this.node.isLeaf) return;
-        if (this.expanded) {
-          this.tree.$emit('node-collapse', this.node.data, this.node, this);
-          this.node.collapse();
-        } else {
-          this.node.expand();
-          this.$emit('node-expand', this.node.data, this.node, this);
-        }
-      },
-
-      handleCheckChange(value, ev) {
-        this.node.setChecked(ev.target.checked, !this.tree.checkStrictly);
-        this.$nextTick(() => {
-          const store = this.tree.store;
-          this.tree.$emit('check', this.node.data, {
-            checkedNodes: store.getCheckedNodes(),
-            checkedKeys: store.getCheckedKeys(),
-            halfCheckedNodes: store.getHalfCheckedNodes(),
-            halfCheckedKeys: store.getHalfCheckedKeys(),
-          });
-        });
-      },
-
-      handleChildNodeExpand(nodeData, node, instance) {
-        this.broadcast('ElTreeNode', 'tree-node-expand', node);
-        this.tree.$emit('node-expand', nodeData, node, instance);
-      },
-
-      handleDragStart(event) {
-        if (!this.tree.draggable) return;
-        this.tree.$emit('tree-node-drag-start', event, this);
-      },
-
-      handleDragOver(event) {
-        if (!this.tree.draggable) return;
-        this.tree.$emit('tree-node-drag-over', event, this);
-        event.preventDefault();
-      },
-
-      handleDrop(event) {
-        event.preventDefault();
-      },
-
-      handleDragEnd(event) {
-        if (!this.tree.draggable) return;
-        this.tree.$emit('tree-node-drag-end', event, this);
-      }
-    },
-
-    created() {
-      console.log(111)
-      const parent = this.$parent;
-
-      if (parent.isTree) {
-        this.tree = parent;
-      } else {
-        this.tree = parent.tree;
-      }
-
-      const tree = this.tree;
-      if (!tree) {
-        console.warn('Can not find node\'s tree.');
-      }
-
-      const props = tree.props || {};
-      const childrenKey = props['children'] || 'children';
-
-      this.$watch(`node.data.${childrenKey}`, () => {
-        this.node.updateChildren();
-      });
-
-      if (this.node.expanded) {
-        this.expanded = true;
-        this.childNodeRendered = true;
-      }
-
-      if(this.tree.accordion) {
-        this.$on('tree-node-expand', node => {
-          if(this.node !== node) {
-            this.node.collapse();
-          }
-        });
+      render(h) {
+        const parent = this.$parent
+        const tree = parent.tree
+        const node = this.node
+        const { data, store } = node
+        return (
+          parent.renderContent
+            ? parent.renderContent.call(parent._renderProxy, h, { _self: tree.$vnode.context, node, data, store })
+            : tree.$scopedSlots.default
+              ? tree.$scopedSlots.default({ node, data })
+              : '111'
+        )
       }
     }
-  };
+  },
+
+  mixins: [emitter],
+
+  props: {
+    node: {
+      default() {
+        return {}
+      }
+    },
+    props: {},
+    renderContent: Function,
+    renderAfterExpand: {
+      type: Boolean,
+      default: true
+    },
+    showCheckbox: {
+      type: Boolean,
+      default: false
+    }
+  },
+
+  data() {
+    return {
+      tree: null,
+      expanded: false,
+      childNodeRendered: false,
+      oldChecked: null,
+      oldIndeterminate: null
+    }
+  },
+
+  watch: {
+    'node.indeterminate'(val) {
+      this.handleSelectChange(this.node.checked, val)
+    },
+
+    'node.checked'(val) {
+      this.handleSelectChange(val, this.node.indeterminate)
+    },
+
+    'node.expanded'(val) {
+      this.$nextTick(() => this.expanded = val)
+      if (val) {
+        this.childNodeRendered = true
+      }
+    }
+  },
+
+  created() {
+    console.log(111)
+    const parent = this.$parent
+
+    if (parent.isTree) {
+      this.tree = parent
+    } else {
+      this.tree = parent.tree
+    }
+
+    const tree = this.tree
+    if (!tree) {
+      console.warn('Can not find node\'s tree.')
+    }
+
+    const props = tree.props || {}
+    const childrenKey = props['children'] || 'children'
+
+    this.$watch(`node.data.${childrenKey}`, () => {
+      this.node.updateChildren()
+    })
+
+    if (this.node.expanded) {
+      this.expanded = true
+      this.childNodeRendered = true
+    }
+
+    if (this.tree.accordion) {
+      this.$on('tree-node-expand', node => {
+        if (this.node !== node) {
+          this.node.collapse()
+        }
+      })
+    }
+  },
+
+  methods: {
+    getNodeKey(node) {
+      return getNodeKey(this.tree.nodeKey, node.data)
+    },
+
+    handleSelectChange(checked, indeterminate) {
+      if (this.oldChecked !== checked && this.oldIndeterminate !== indeterminate) {
+        this.tree.$emit('check-change', this.node.data, checked, indeterminate)
+      }
+      this.oldChecked = checked
+      this.indeterminate = indeterminate
+    },
+
+    handleClick() {
+      const store = this.tree.store
+      store.setCurrentNode(this.node)
+      this.tree.$emit('current-change', store.currentNode ? store.currentNode.data : null, store.currentNode)
+      this.tree.currentNode = this
+      if (this.tree.expandOnClickNode) {
+        this.handleExpandIconClick()
+      }
+      if (this.tree.checkOnClickNode && !this.node.disabled) {
+        this.handleCheckChange(null, {
+          target: { checked: !this.node.checked }
+        })
+      }
+      this.tree.$emit('node-click', this.node.data, this.node, this)
+    },
+
+    handleContextMenu(event) {
+      if (this.tree._events['node-contextmenu'] && this.tree._events['node-contextmenu'].length > 0) {
+        event.stopPropagation()
+        event.preventDefault()
+      }
+      this.tree.$emit('node-contextmenu', event, this.node.data, this.node, this)
+    },
+
+    handleExpandIconClick() {
+      if (this.node.isLeaf) return
+      if (this.expanded) {
+        this.tree.$emit('node-collapse', this.node.data, this.node, this)
+        this.node.collapse()
+      } else {
+        this.node.expand()
+        this.$emit('node-expand', this.node.data, this.node, this)
+      }
+    },
+
+    handleCheckChange(value, ev) {
+      this.node.setChecked(ev.target.checked, !this.tree.checkStrictly)
+      this.$nextTick(() => {
+        const store = this.tree.store
+        this.tree.$emit('check', this.node.data, {
+          checkedNodes: store.getCheckedNodes(),
+          checkedKeys: store.getCheckedKeys(),
+          halfCheckedNodes: store.getHalfCheckedNodes(),
+          halfCheckedKeys: store.getHalfCheckedKeys()
+        })
+      })
+    },
+
+    handleChildNodeExpand(nodeData, node, instance) {
+      this.broadcast('TreeNode', 'tree-node-expand', node)
+      this.tree.$emit('node-expand', nodeData, node, instance)
+    },
+
+    handleDragStart(event) {
+      if (!this.tree.draggable) return
+      this.tree.$emit('tree-node-drag-start', event, this)
+    },
+
+    handleDragOver(event) {
+      if (!this.tree.draggable) return
+      this.tree.$emit('tree-node-drag-over', event, this)
+      event.preventDefault()
+    },
+
+    handleDrop(event) {
+      event.preventDefault()
+    },
+
+    handleDragEnd(event) {
+      if (!this.tree.draggable) return
+      this.tree.$emit('tree-node-drag-end', event, this)
+    }
+  }
+}
 </script>
 <style lang="stylus">
 .org-tree-node.is-drop-inner >.org-tree-node-label .org-tree-node-label-inner {
