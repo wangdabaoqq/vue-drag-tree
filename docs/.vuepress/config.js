@@ -1,8 +1,8 @@
 const pkg =require('../../package.json')
 module.exports = {
   title: pkg.name,
-  description: '快速搭建第三方库',
-  base: '/',
+  description: '基于拖拽的组织树',
+  base: '/vue-drag-tree/',
   themeConfig: {
     nav: [
         { text: '主页', link: '/' },

@@ -39,7 +39,8 @@
     "version": "conventional-changelog -p angular -i CHANGELOG.md -s",
     "pub:rollup": "npm run uv && npm run lib && npm publish",
     "pub:cli": "npm run uv && npm run lib:cli && npm publish",
-    "uv": "cross-env node ./script/update.version.js"
+    "uv": "cross-env node ./script/update.version.js",
+    "deploy:doc": "vuepress build docs && ./script/deploy"
   },
   "dependencies": {},
   "devDependencies": {
