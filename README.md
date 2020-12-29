@@ -9,7 +9,7 @@
 - [维护者](#维护者)
 - [支持浏览器](#支持浏览器)
 ## 安装
-```sh
+```bash
 # use npm
 npm install vue-drag-tree-org
 
