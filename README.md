@@ -20,8 +20,10 @@ yarn add vue-drag-tree-org
 ```js
 # use
 import VueDragTree from 'vue-drag-tree-org'
+import 'vue-drag-tree-org/lib/theme/index.css'
 
 Vue.use(VueDragTree)
+
 # or use
 compoents: {
   VueDragTree
@@ -30,11 +32,11 @@ compoents: {
 ## CDN
 ```html
 # css
-<link href="https://unpkg.com/vue-drag-tree-org/lib/theme/index.css">
+<link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vue-drag-tree-org@1.0.4/lib/theme/index.css">
 
 # js
-<script src="https://unpkg.com/vue/dist/vue.js"></script>
-<script src="https://unpkg.com/vue-drag-tree-org/lib/index.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue-drag-tree-org@1.0.4/lib/index.umd.js"></script>
 ```
 
 ## 相关仓库
@@ -42,12 +44,13 @@ compoents: {
 - [vue-org-tree](https://github.com/hukaibaihu/vue-org-tree) - 基于Vue的组织树
 
 ## 文档
-[文档地址](https://wangdabaoqq.github.io/vue-drag-tree/lib/test.html)
+[文档地址](https://wangdabaoqq.github.io/documents/)
 
 ## 维护者
 
 [@wangdabaoqq](https://github.com/wangdabaoqq)
 ## 支持浏览器
 
-| [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/edge/edge_48x48.png" alt="IE / Edge" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)<br/>IE / Edge | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/firefox/firefox_48x48.png" alt="Firefox" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)<br/>Firefox | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/chrome/chrome_48x48.png" alt="Chrome" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)<br/>Chrome | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/safari/safari_48x48.png" alt="Safari" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)<br/>Safari | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/safari-ios/safari-ios_48x48.png" alt="iOS Safari" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)<br/>iOS Safari |
-| --------- | --------- | --------- | --------- | --------- |
+
+| [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/edge/edge_48x48.png" alt="IE / Edge" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)<br/>IE / Edge | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/firefox/firefox_48x48.png" alt="Firefox" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)<br/>Firefox | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/chrome/chrome_48x48.png" alt="Chrome" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)<br/>Chrome | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/safari/safari_48x48.png" alt="Safari" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)<br/>Safari |
+| --------- | --------- | --------- | --------- |

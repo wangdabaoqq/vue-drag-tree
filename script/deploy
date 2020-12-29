@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+`#!/usr/bin/env sh
 
 # 当发生错误时中止脚本
 set -e
@@ -24,4 +24,4 @@ git commit -m 'deploy'
 # 部署到 https://<USERNAME>.github.io/<REPO>
 git push -f git@github.com:wangdabaoqq/vue-drag-tree.git master:gh-pages
 
-cd -
+cd -`

@@ -1,17 +1,5 @@
 <template>
   <div class="hello">
-    <!-- <Row>
-      <Col :span="8" />
-      <Checkbox @change="change">
-        Horizontal
-      </Checkbox>
-      </Col>
-      <Col :span="8" />
-      <Checkbox v-model="isExpand">
-        Expand All
-      </Checkbox>
-      </Col>
-    </Row> -->
     <vueDragTree
       :data="data"
       :props="defaultProps"
@@ -103,22 +91,6 @@ export default {
   },
   mounted() {
     console.log(this.data)
-  },
-  methods: {
-    change(val) {
-      if (val) {
-        this.direction = 'horizontal'
-      } else {
-        this.direction = ''
-      }
-    },
-    changeEX(val) {
-      if (val) {
-        this.isExpand = false
-      } else {
-        this.isExpand = true
-      }
-    }
   }
 }
 </script>
