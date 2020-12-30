@@ -44,7 +44,7 @@ compoents: {
 - [vue-org-tree](https://github.com/hukaibaihu/vue-org-tree) - 基于Vue的组织树
 
 ## 文档
-[文档地址](https://wangdabaoqq.github.io/documents/)
+[文档地址](https://wangdabao-doc.js.org/views/1.x/)
 
 ## 维护者
 
