@@ -1,25 +1,35 @@
 <template>
   <div class="hello">
+    <!-- <input
+  placeholder="输入关键字进行过滤"
+  v-model="filterText">
+</input> -->
     <vueDragTree
+      ref="tree"
       :data="data"
       :props="defaultProps"
       node-key="id"
-      :default-expand-all="isExpand"
-      :direction="direction"
+      empty-text="暂无数据"
+      draggable
+      @node-drag-start="handleDragStart"
+      @node-drag-enter="handleDragEnter"
+      @node-drag-leave="handleDragLeave"
+      @node-drag-over="handleDragOver"
+      @node-drag-end="handleDragEnd"
+      @node-drop="handleDrop"
     >
-      <span
+      <!-- <span
         slot-scope="{ node, data }"
-        class="org-tree-node-label"
-      >
-        <span class="org-tree-node-label-inner clickable-node">
+      > -->
+      <!-- <span slot-scope="{ node, data }">
           {{ data.label }}
-        </span>
-      </span>
+        </span> -->
+      <!-- </span> -->
     </vueDragTree>
   </div>
 </template>
 
-<script>
+<script type="text/jsx">
 // import { Checkbox, Row, Col } from 'element-ui'
 import vueDragTree from '../../src/index'
 // import 'element-ui/lib/theme-chalk/index.css'
@@ -29,8 +39,9 @@ export default {
   components: { vueDragTree },
   data() {
     return {
-      direction: 'Horizontal',
-      isExpand: true,
+      direction: 'horizontal',
+      isExpand: false,
+      filterText: '',
       data: [
         {
           id: 0,
@@ -89,8 +100,37 @@ export default {
       }
     }
   },
+  watch: {
+    filterText(val) {
+      this.$refs.tree.filter(val)
+    }
+  },
   mounted() {
     console.log(this.data)
+  },
+  methods: {
+    filterNode(value, data) {
+      if (!value) return true
+      return data.label.indexOf(value) !== -1
+    },
+    handleDragStart(node, ev) {
+      console.log('drag start', node)
+    },
+    handleDragEnter(draggingNode, dropNode, ev) {
+      console.log('tree drag enter: ', dropNode.label)
+    },
+    handleDragLeave(draggingNode, dropNode, ev) {
+      console.log('tree drag leave: ', dropNode.label)
+    },
+    handleDragOver(draggingNode, dropNode, ev) {
+      console.log('tree drag over: ', dropNode.label)
+    },
+    handleDragEnd(draggingNode, dropNode, dropType, ev) {
+      console.log('tree drag end: ', dropNode && dropNode.label, dropType)
+    },
+    handleDrop(draggingNode, dropNode, dropType, ev) {
+      console.log('tree drop: ', dropNode.label, dropType)
+    }
   }
 }
 </script>

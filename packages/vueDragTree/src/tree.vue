@@ -3,10 +3,9 @@
     class="org-tree"
     :class="[
       {
-        'el-tree-node--highlight-current': highlightCurrent,
+        'el-tree--highlight-current': highlightCurrent,
         'is-dragging': !!dragState.draggingNode,
-        'is-drop-not-allow': !dragState.allowDrop,
-        'is-drop-inner': dragState.dropType === 'inner'
+        'is-drop-not-allow': dragState.allowDrop,
       },
       direction
     ]"
@@ -18,7 +17,6 @@
       :node="child"
       :props="props"
       :render-after-expand="renderAfterExpand"
-      :show-checkbox="showCheckbox"
       :render-content="renderContent"
       @node-expand="handleNodeExpand"
     />
@@ -28,11 +26,11 @@
     >
       <span class="el-tree-node__empty-text">{{ emptyText }}</span>
     </div>
-    <div
+    <!-- <div
       v-show="dragState.showDropIndicator"
       ref="dropIndicator"
       class="el-tree-node__drop-indicator"
-    />
+    /> -->
   </div>
 </template>
 
@@ -73,8 +71,10 @@ export default {
       default: true
     },
     nodeKey: String,
-    checkStrictly: Boolean,
-    defaultExpandAll: Boolean,
+    defaultExpandAll: {
+      type: Boolean,
+      default: false
+    },
     expandOnClickNode: {
       type: Boolean,
       default: true
@@ -88,14 +88,14 @@ export default {
       type: Boolean,
       default: true
     },
-    defaultCheckedKeys: Array,
+    // defaultCheckedKeys: Array,
     defaultExpandedKeys: Array,
     currentNodeKey: [String, Number],
     renderContent: Function,
-    showCheckbox: {
-      type: Boolean,
-      default: false
-    },
+    // showCheckbox: {
+    //   type: Boolean,
+    //   default: false
+    // },
     draggable: {
       type: Boolean,
       default: false
@@ -111,18 +111,18 @@ export default {
         }
       }
     },
-    lazy: {
-      type: Boolean,
-      default: false
-    },
+    // lazy: {
+    //   type: Boolean,
+    //   default: false
+    // },
     highlightCurrent: Boolean,
-    load: Function,
-    filterNodeMethod: Function,
+    // load: Function,
+    // filterNodeMethod: Function,
     accordion: Boolean,
-    indent: {
-      type: Number,
-      default: 18
-    },
+    // indent: {
+    //   type: Number,
+    //   default: 18
+    // },
     iconClass: String
   },
 
@@ -134,7 +134,7 @@ export default {
       treeItems: null,
       checkboxItems: [],
       dragState: {
-        showDropIndicator: false,
+        // showDropIndicator: false,
         draggingNode: null,
         dropNode: null,
         allowDrop: true
@@ -163,13 +163,14 @@ export default {
   },
 
   watch: {
-    defaultCheckedKeys(newVal) {
-      this.store.setDefaultCheckedKey(newVal)
-    },
-
+    // defaultCheckedKeys(newVal) {
+    //   this.store.setDefaultCheckedKey(newVal)
+    // }
     defaultExpandedKeys(newVal) {
+      console.log(newVals, this.store.defaultExpandedKeys)
       this.store.defaultExpandedKeys = newVal
       this.store.setDefaultExpandedKeys(newVal)
+      console.log(this.store, 2222)
     },
 
     data(newVal) {
@@ -180,30 +181,24 @@ export default {
       Array.prototype.forEach.call(val, (checkbox) => {
         checkbox.setAttribute('tabindex', -1)
       })
-    },
-
-    checkStrictly(newVal) {
-      this.store.checkStrictly = newVal
     }
   },
 
   created() {
     this.isTree = true
-
     this.store = new TreeStore({
       key: this.nodeKey,
       data: this.data,
-      lazy: this.lazy,
+      // lazy: this.lazy,
       props: this.props,
-      load: this.load,
+      // load: this.load,
       currentNodeKey: this.currentNodeKey,
-      checkStrictly: this.checkStrictly,
       checkDescendants: this.checkDescendants,
-      defaultCheckedKeys: this.defaultCheckedKeys,
+      // defaultCheckedKeys: this.defaultCheckedKeys,
       defaultExpandedKeys: this.defaultExpandedKeys,
       autoExpandParent: this.autoExpandParent,
       defaultExpandAll: this.defaultExpandAll,
-      filterNodeMethod: this.filterNodeMethod
+      // filterNodeMethod: this.filterNodeMethod
     })
 
     this.root = this.store.root
@@ -225,12 +220,12 @@ export default {
       dragState.draggingNode = treeNode
       this.$emit('node-drag-start', treeNode.node, event)
     })
-
     this.$on('tree-node-drag-over', (event, treeNode) => {
       const dropNode = findNearestComponent(event.target, 'TreeNode')
+      // console.log(dropNode, dragState, 1111)
       const oldDropNode = dragState.dropNode
       if (oldDropNode && oldDropNode !== dropNode) {
-        removeClass(oldDropNode.$el, 'is-drop-inner')
+        removeClass(oldDropNode.$refs.nodelabel, 'is-drop-inner')
       }
       const draggingNode = dragState.draggingNode
       if (!draggingNode || !dropNode) return
@@ -271,15 +266,14 @@ export default {
         dropNext = false
       }
 
-      const targetPosition = dropNode.$el.getBoundingClientRect()
-      console.log(targetPosition)
-      const treePosition = this.$el.getBoundingClientRect()
+      const targetPosition = dropNode.$refs.nodelabel.getBoundingClientRect()
+      // const treePosition = this.$el.getBoundingClientRect()
 
       let dropType
       const prevPercent = dropPrev ? (dropInner ? 0.25 : dropNext ? 0.45 : 1) : -1
       const nextPercent = dropNext ? (dropInner ? 0.75 : dropPrev ? 0.55 : 0) : 1
 
-      let indicatorTop = -9999
+      // let indicatorTop = -9999
       const distance = event.clientY - targetPosition.top
       if (distance < targetPosition.height * prevPercent) {
         dropType = 'before'
@@ -291,26 +285,26 @@ export default {
         dropType = 'none'
       }
 
-      const iconPosition = dropNode.$el
-        .querySelector('.org-tree-node-label')
-        .getBoundingClientRect()
-      const dropIndicator = this.$refs.dropIndicator
-      if (dropType === 'before') {
-        indicatorTop = iconPosition.top - treePosition.top
-      } else if (dropType === 'after') {
-        indicatorTop = iconPosition.bottom - treePosition.top
-      }
-      dropIndicator.style.top = indicatorTop + 'px'
-      dropIndicator.style.left = iconPosition.right - treePosition.left + 'px'
-
+      // const iconPosition = dropNode.$el
+      // .querySelector('.org-tree-node-label')
+      // .getBoundingClientRect()
+      // const dropIndicator = this.$refs.dropIndicator
+      // if (dropType === 'before') {
+      //   indicatorTop = iconPosition.top - treePosition.top
+      // } else if (dropType === 'after') {
+      //   indicatorTop = iconPosition.bottom - treePosition.top
+      // }
+      // dropIndicator.style.top = indicatorTop + 'px'
+      // dropIndicator.style.left = iconPosition.right - treePosition.left + 'px'
       if (dropType === 'inner') {
-        addClass(dropNode.$el, 'is-drop-inner')
+        addClass(dropNode.$refs.nodelabel, 'is-drop-inner')
       } else {
-        removeClass(dropNode.$el, 'is-drop-inner')
+        removeClass(dropNode.$refs.nodelabel, 'is-drop-inner')
       }
 
       dragState.showDropIndicator = dropType === 'before' || dropType === 'after'
       dragState.allowDrop = dragState.showDropIndicator || userAllowDropInner
+      console.log(dragState.allowDrop)
       dragState.dropType = dropType
       this.$emit('node-drag-over', draggingNode.node, dropNode.node, event)
     })
@@ -336,7 +330,7 @@ export default {
           this.store.registerNode(draggingNodeCopy)
         }
 
-        removeClass(dropNode.$el, 'is-drop-inner')
+        removeClass(dropNode.$refs.nodelabel, 'is-drop-inner')
 
         this.$emit('node-drag-end', draggingNode.node, dropNode.node, dropType, event)
         if (dropType !== 'none') {
@@ -347,7 +341,7 @@ export default {
         this.$emit('node-drag-end', draggingNode.node, null, dropType, event)
       }
 
-      dragState.showDropIndicator = false
+      // dragState.showDropIndicator = false
       dragState.draggingNode = null
       dragState.dropNode = null
       dragState.allowDrop = true
@@ -355,20 +349,20 @@ export default {
   },
 
   mounted() {
-    this.initTabIndex()
-    this.$el.addEventListener('keydown', this.handleKeydown)
+    // this.initTabIndex()
+    // this.$el.addEventListener('keydown', this.handleKeydown)
   },
 
   updated() {
     this.treeItems = this.$el.querySelectorAll('[role=treeitem]')
-    this.checkboxItems = this.$el.querySelectorAll('input[type=checkbox]')
+    // this.checkboxItems = this.$el.querySelectorAll('input[type=checkbox]')
   },
 
   methods: {
-    filter(value) {
-      if (!this.filterNodeMethod) throw new Error('[Tree] filterNodeMethod is required when filter')
-      this.store.filter(value)
-    },
+    // filter(value) {
+    //   if (!this.filterNodeMethod) throw new Error('[Tree] filterNodeMethod is required when filter')
+    //   this.store.filter(value)
+    // },
 
     getNodeKey(node) {
       return getNodeKey(this.nodeKey, node.data)
@@ -467,71 +461,7 @@ export default {
     updateKeyChildren(key, data) {
       if (!this.nodeKey) throw new Error('[Tree] nodeKey is required in updateKeyChild')
       this.store.updateChildren(key, data)
-    },
-
-    initTabIndex() {
-      this.treeItems = this.$el.querySelectorAll('.is-focusable[role=treeitem]')
-      this.checkboxItems = this.$el.querySelectorAll('input[type=checkbox]')
-      const checkedItem = this.$el.querySelectorAll('.is-checked[role=treeitem]')
-      if (checkedItem.length) {
-        checkedItem[0].setAttribute('tabindex', 0)
-        return
-      }
-      this.treeItems[0] && this.treeItems[0].setAttribute('tabindex', 0)
-    },
-
-    handleKeydown(ev) {
-      const currentItem = ev.target
-      if (currentItem.className.indexOf('el-tree-node') === -1) return
-      const keyCode = ev.keyCode
-      this.treeItems = this.$el.querySelectorAll('.is-focusable[role=treeitem]')
-      const currentIndex = this.treeItemArray.indexOf(currentItem)
-      let nextIndex
-      if ([38, 40].indexOf(keyCode) > -1) {
-        // up、down
-        ev.preventDefault()
-        if (keyCode === 38) {
-          // up
-          nextIndex = currentIndex !== 0 ? currentIndex - 1 : 0
-        } else {
-          nextIndex = currentIndex < this.treeItemArray.length - 1 ? currentIndex + 1 : 0
-        }
-        this.treeItemArray[nextIndex].focus() // 选中
-      }
-      if ([37, 39].indexOf(keyCode) > -1) {
-        // left、right 展开
-        ev.preventDefault()
-        currentItem.click() // 选中
-      }
-      const hasInput = currentItem.querySelector('[type="checkbox"]')
-      if ([13, 32].indexOf(keyCode) > -1 && hasInput) {
-        // space enter选中checkbox
-        ev.preventDefault()
-        hasInput.click()
-      }
     }
   }
 }
 </script>
-<style lang="stylus">
-.org-tree-container {
-  display: inline-block;
-  padding: 15px;
-  background-color: #fff;
-}
-
-.org-tree {
-  // display: inline-block;
-  display: table;
-  text-align: center;
-
-  &:before, &:after {
-    content: '';
-    display: table;
-  }
-
-  &:after {
-    clear: both;
-  }
-}
-</style>

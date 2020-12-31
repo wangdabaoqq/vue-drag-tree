@@ -1,4 +1,5 @@
 import vueDragTree from './src/tree.vue'
+import '../style/index.styl'
 // import '../../lib/theme/drag-module.css'
 export function install(Vue) {
   if (install.installed) {
