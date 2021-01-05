@@ -16,5 +16,4 @@ vueDragTree.install = install
 if (typeof window !== 'undefined' && window.Vue) {
   window.Vue.use(vueDragTree)
 }
-
 export default vueDragTree

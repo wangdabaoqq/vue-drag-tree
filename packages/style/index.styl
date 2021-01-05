@@ -4,7 +4,6 @@
   background-color: #fff;
 }
 .org-tree {
-  // display: inline-block;
   display: table;
   text-align: center;
 
@@ -17,12 +16,12 @@
     clear: both;
   }
 }
-// 拖拽
+
 .is-dragging {
   .org-tree-node-children {
     .org-tree-node {
       .org-tree-node-label {
-        cursor move
+        cursor: move;
       }
     }
   }
@@ -43,17 +42,6 @@
       border-right: 1px solid #ddd;
   }
 }
-// .org-tree-node {
-//   .org-tree-node-label:after {
-//         content: "";
-//     position: absolute;
-//     top: 100%;
-//     left: 0;
-//     width: 50%;
-//     height: 20px;
-//     border-right: 1px solid #ddd;
-//   }
-// }
 .org-tree-node,
 .org-tree-node-children {
   position: relative;
@@ -68,12 +56,9 @@
 .org-tree-node-label {
   position: relative;
   display: inline-block;
-  // height: 60px;
   padding: 10px 0px;
   cursor: pointer;
-  //   text-align: center;
-  //   border-radius: 3px;
-  //   box-shadow: 0 1px 5px rgba(0, 0, 0, .15);
+  white-space nowrap
   .org-tree-node-label-inner {
     padding: 10px 15px;
     text-align: center;
@@ -170,13 +155,6 @@
     width: 50%;
     height: 20px;
     border-right: 1px solid #ddd;
-      // content: '';
-      // position: absolute;
-      // top: 0;
-      // left: 100%;
-      // width: 20px;
-      // height: 20px;
-      // border-bottom: 1px solid #ddd;
     }
   }
 }
@@ -213,7 +191,7 @@
     &.collapsed {
       .org-tree-node-label:after {
         content: '';
-        position absolute;
+        position: absolute;
         top: 0;
         left: 100%;
         width: 20px;
@@ -225,10 +203,6 @@
   }
   .org-tree-node-children {
     .org-tree-node {
-      // display: flex;
-      // flex-direction: row;
-      // justify-content: flex-start;
-      // align-items: center;
       display: table-cell;
       float: none;
       padding-top: 0;
@@ -260,12 +234,6 @@
         border-top: 0;
         border-left: 1px solid #ddd;
       }
-      // &:first-child:after {
-      //   border none
-      // }
-      //  &:first-child:before {
-      //   border none
-      // }
       &:not(:only-child):after {
         border-top: 1px solid #ddd;
       }
@@ -279,7 +247,6 @@
   .org-tree-node-label {
     display: table-cell;
     vertical-align: middle;
-    // height: 60px;
   }
 
  .org-tree-node-children .org-tree-node.collapsed {
@@ -306,10 +273,6 @@
   }
 
   .org-tree-node-children {
-    // display: flex;
-    // flex-direction: column;
-    // justify-content: center;
-    // align-items: flex-start;
     display: table-cell;
     padding-top: 0;
     padding-left: 20px;

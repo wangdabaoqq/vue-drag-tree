@@ -1,4 +1,5 @@
 <template>
+<div class="org-tree-container">
   <div
     class="org-tree"
     :class="[
@@ -32,6 +33,7 @@
       class="el-tree-node__drop-indicator"
     /> -->
   </div>
+</div>
 </template>
 
 <script>
@@ -79,7 +81,7 @@ export default {
       type: Boolean,
       default: true
     },
-    checkOnClickNode: Boolean,
+    // checkOnClickNode: Boolean,
     checkDescendants: {
       type: Boolean,
       default: false
@@ -106,8 +108,7 @@ export default {
       default() {
         return {
           children: 'children',
-          label: 'label',
-          disabled: 'disabled'
+          label: 'label'
         }
       }
     },
@@ -167,10 +168,8 @@ export default {
     //   this.store.setDefaultCheckedKey(newVal)
     // }
     defaultExpandedKeys(newVal) {
-      console.log(newVals, this.store.defaultExpandedKeys)
       this.store.defaultExpandedKeys = newVal
       this.store.setDefaultExpandedKeys(newVal)
-      console.log(this.store, 2222)
     },
 
     data(newVal) {
@@ -193,11 +192,11 @@ export default {
       props: this.props,
       // load: this.load,
       currentNodeKey: this.currentNodeKey,
-      checkDescendants: this.checkDescendants,
+      // checkDescendants: this.checkDescendants,
       // defaultCheckedKeys: this.defaultCheckedKeys,
       defaultExpandedKeys: this.defaultExpandedKeys,
       autoExpandParent: this.autoExpandParent,
-      defaultExpandAll: this.defaultExpandAll,
+      defaultExpandAll: this.defaultExpandAll
       // filterNodeMethod: this.filterNodeMethod
     })
 
