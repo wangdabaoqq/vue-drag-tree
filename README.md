@@ -19,24 +19,23 @@ yarn add vue-drag-tree-org
 ## 使用
 ```js
 # use
-import VueDragTree from 'vue-drag-tree-org'
-import 'vue-drag-tree-org/lib/theme/index.css'
+import VueDragTreeOrg from 'vue-drag-tree-org'
 
-Vue.use(VueDragTree)
+Vue.use(VueDragTreeOrg)
 
 # or use
-compoents: {
-  VueDragTree
+components: {
+  VueDragTreeOrg
 }
 ```
 ## CDN
 ```html
 # css
-<link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vue-drag-tree-org@1.0.4/lib/theme/index.css">
+<link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vue-drag-tree-org@1.0.19/lib/theme/index.css">
 
 # js
 <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/vue-drag-tree-org@1.0.4/lib/index.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue-drag-tree-org@1.0.19/lib/index.umd.js"></script>
 ```
 
 ## 相关仓库
