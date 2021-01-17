@@ -31,11 +31,11 @@ components: {
 ## CDN
 ```html
 # css
-<link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vue-drag-tree-org@1.0.19/lib/theme/index.css">
+<link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vue-drag-tree-org2.0.0/lib/theme/index.css">
 
 # js
 <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/vue-drag-tree-org@1.0.19/lib/index.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue-drag-tree-org@2.0.0/lib/index.umd.js"></script>
 ```
 
 ## 相关仓库
