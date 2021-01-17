@@ -18,51 +18,30 @@
     @dragend.stop="handleDragEnd"
     @drop.stop="handleDrop"
   >
-    <div class="org-tree-node-label" ref="nodelabel" @click="handleClick">
-      <!-- <span @click.prevent.stop="toggle" :class="['org-tree-node-btn', { 'is-leaf': node.isLeaf, expanded: !node.isLeaf && expanded }]" v-if="node.children &&  node.children.length > 0"></span> -->
-      <span
+    <div class="org-tree-node-label" ref="nodelabel">
+      <node-icon
         v-if="node.childNodes && node.childNodes.length > 0"
-        :class="[
-          'org-tree-node-btn',
-          { 'is-leaf': node.isLeaf, expanded: !node.isLeaf && expanded },
-          'org-tree-node__expand-icon'
-        ]"
-        @click.stop="handleExpandIconClick"
+        :node="node"
       />
-      <!-- <el-checkbox
-        v-if="showCheckbox"
-        v-model="node.checked"
-        :indeterminate="node.indeterminate"
-        :disabled="!!node.disabled"
-        @click.native.stop
-        @change="handleCheckChange"
-      >
-      </el-checkbox> -->
-      <!-- <span
-        v-if="node.loading"
-        class="org-tree-node__loading-icon el-icon-loading"
-      /> -->
       <node-content :node="node" />
     </div>
-    <!-- <el-collapse-transition> -->
-    <div
-      v-if="(!renderAfterExpand || childNodeRendered) && node.childNodes.length > 0"
-      v-show="expanded"
-      class="org-tree-node-children"
-      role="group"
-      :aria-expanded="expanded"
-    >
-      <tree-node
-        v-for="child in node.childNodes"
-        :key="getNodeKey(child)"
-        :render-content="renderContent"
-        :render-after-expand="renderAfterExpand"
-        :node="child"
-        @node-expand="handleChildNodeExpand"
-      />
+      <div
+        v-if="(!renderAfterExpand || childNodeRendered) && node.childNodes.length > 0"
+        v-show="expanded"
+        class="org-tree-node-children"
+        role="group"
+        :aria-expanded="expanded"
+      >
+        <tree-node
+          v-for="child in node.childNodes"
+          :key="getNodeKey(child)"
+          :render-content="renderContent"
+          :render-after-expand="renderAfterExpand"
+          :node="child"
+          @node-expand="handleChildNodeExpand"
+        />
+      </div>
     </div>
-    <!-- </el-collapse-transition> -->
-  </div>
 </template>
 
 <script>
@@ -71,6 +50,7 @@
 import emitter from '../model/emiter'
 import { getNodeKey } from '../model/util'
 import NodeContent from './node-content'
+import NodeIcon from './node-icon'
 export default {
   name: 'TreeNode',
 
@@ -79,7 +59,8 @@ export default {
   components: {
     // ElCollapseTransition,
     // ElCheckbox,
-    NodeContent
+    NodeContent,
+    NodeIcon
   },
 
   mixins: [emitter],
@@ -114,27 +95,10 @@ export default {
       console.log(this.node.expanded, this.node, val)
       this.$nextTick(() => {
         this.expanded = val
-        // this.expanded =
-        // if (val) {
-        //   this.expanded = false
-        // } else {
-        //   this.expanded = true
-        // }
-        // if (val && this.node.childNodes.length > 0) {
-        //   this.expanded = false
-        // } else {
-        //   console.log(this.node.childNodes)
-        //   this.expanded = true
-        // }
       })
       if (val) {
         this.childNodeRendered = true
       }
-      // if (this.node.childNodes && this.node.childNodes.length > 0) {
-      //   this.leaf = false
-      // } else {
-      //   this.leaf = true
-      // }
     }
    },
 
@@ -159,7 +123,6 @@ export default {
       this.node.updateChildren()
     })
     if (this.node.expanded) {
-      console.log('extendsextends')
       this.expanded = true
       this.childNodeRendered = true
     }
@@ -214,12 +177,10 @@ export default {
     handleExpandIconClick() {
       if (this.node.isLeaf) return
       if (this.expanded) {
-        console.log(1233)
         this.tree.$emit('node-collapse', this.node.data, this.node, this)
         this.node.collapse()
       } else {
         this.node.expand()
-        console.log(789, this.node.data)
         this.$emit('node-expand', this.node.data, this.node, this)
       }
     },

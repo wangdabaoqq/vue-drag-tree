@@ -66,22 +66,24 @@
     box-shadow: 0 1px 5px rgba(0, 0, 0, .15);
   }
 }
-.org-tree-node-btn {
+.org-tree-node-icon {
   position: absolute;
   top: 100%;
   left: 50%;
-  width: 20px;
-  height: 20px;
-  z-index: 10;
   margin-left: -11px;
   margin-top: 9px;
   background-color: #fff;
-  border: 1px solid #ccc;
-  border-radius: 50%;
-  box-shadow: 0 0 2px rgba(0, 0, 0, .15);
+  z-index: 10;
   cursor: pointer;
   transition: all .35s ease;
-
+}
+.org-tree-node-btn {
+  @extend .org-tree-node-icon
+  box-shadow: 0 0 2px rgba(0, 0, 0, .15);
+  border: 1px solid #ccc;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
   &:hover {
     background-color: #e7e8e9;
     transform: scale(1.15);

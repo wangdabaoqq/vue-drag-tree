@@ -38,7 +38,6 @@ export function hasClass(el, cls) {
 
 export function addClass(el, cls) {
   if (!el) return
-  console.log(el)
   var curClass = el.className
   var classes = (cls || '').split(' ')
 
