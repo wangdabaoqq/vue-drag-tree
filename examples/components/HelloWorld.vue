@@ -13,11 +13,24 @@
       :props="defaultProps"
     >
       <!-- <span
+        slot="list"
         slot-scope="{ node, data }"
       > -->
-      <!-- <span slot-scope="{ node, data }">
-          {{ data.label }}
-        </span> -->
+      <span
+        slot="node-icon"
+        slot-scope="{ node }"
+      >
+        <div
+          v-if="node.expanded"
+          style="border: 1px solid red; background: #fff;width: 20px; height: 20px; display: flex; align-items: center; justify-content: center"
+        >-</div>
+        <div
+          v-else
+          style="border: 1px solid red; background: #fff; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center"
+        >
+          +
+        </div>
+      </span>
       <!-- </span> -->
     </VueDragTreeOrg>
   </div>
