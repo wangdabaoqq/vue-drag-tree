@@ -37,7 +37,8 @@
     "version": "conventional-changelog -p angular -i CHANGELOG.md -s",
     "pub:rollup": "npm run uv && npm run lib",
     "pub:cli": "npm run uv && npm run lib:cli",
-    "uv": "cross-env node ./script/update.version.js"
+    "uv": "cross-env node ./script/update.version.js",
+    "publish": "npm run lib:cli && npm run lib && npm run uv"
   },
   "dependencies": {},
   "devDependencies": {
