@@ -10,7 +10,6 @@
       },
       direction
     ]"
-    role="tree"
   >
     <tree-node
       v-for="child in root.childNodes"
@@ -27,11 +26,6 @@
     >
       <span class="el-tree-node__empty-text">{{ emptyText }}</span>
     </div>
-    <!-- <div
-      v-show="dragState.showDropIndicator"
-      ref="dropIndicator"
-      class="el-tree-node__drop-indicator"
-    /> -->
   </div>
 </div>
 </template>
@@ -239,6 +233,7 @@ export default {
         dropNext = this.allowDrop(draggingNode.node, dropNode.node, 'next')
       }
       event.dataTransfer.dropEffect = dropInner ? 'move' : 'none'
+      console.log(dropNode.node, draggingNode.node)
       if ((dropPrev || dropInner || dropNext) && oldDropNode !== dropNode) {
         if (oldDropNode) {
           this.$emit('node-drag-leave', draggingNode.node, oldDropNode.node, event)
@@ -253,6 +248,7 @@ export default {
       if (dropNode.node.nextSibling === draggingNode.node) {
         dropNext = false
       }
+      console.log(dropNode.node.previousSibling)
       if (dropNode.node.previousSibling === draggingNode.node) {
         dropPrev = false
       }
@@ -267,13 +263,13 @@ export default {
 
       const targetPosition = dropNode.$refs.nodelabel.getBoundingClientRect()
       // const treePosition = this.$el.getBoundingClientRect()
-
+      // console.log(targetPosition)
       let dropType
       const prevPercent = dropPrev ? (dropInner ? 0.25 : dropNext ? 0.45 : 1) : -1
       const nextPercent = dropNext ? (dropInner ? 0.75 : dropPrev ? 0.55 : 0) : 1
-
       // let indicatorTop = -9999
       const distance = event.clientY - targetPosition.top
+      // console.log(prevPercent, nextPercent, targetPosition.height * prevPercent, distance)
       if (distance < targetPosition.height * prevPercent) {
         dropType = 'before'
       } else if (distance > targetPosition.height * nextPercent) {
@@ -303,7 +299,7 @@ export default {
 
       dragState.showDropIndicator = dropType === 'before' || dropType === 'after'
       dragState.allowDrop = dragState.showDropIndicator || userAllowDropInner
-      console.log(dragState.allowDrop)
+      // console.log(dragState.allowDrop)
       dragState.dropType = dropType
       this.$emit('node-drag-over', draggingNode.node, dropNode.node, event)
     })
@@ -315,6 +311,7 @@ export default {
 
       if (draggingNode && dropNode) {
         const draggingNodeCopy = { data: draggingNode.node.data }
+        console.log(dropType)
         if (dropType !== 'none') {
           draggingNode.node.remove()
         }
@@ -352,10 +349,10 @@ export default {
     // this.$el.addEventListener('keydown', this.handleKeydown)
   },
 
-  updated() {
-    this.treeItems = this.$el.querySelectorAll('[role=treeitem]')
-    // this.checkboxItems = this.$el.querySelectorAll('input[type=checkbox]')
-  },
+  // updated() {
+  //   this.treeItems = this.$el.querySelectorAll('[role=treeitem]')
+  //   // this.checkboxItems = this.$el.querySelectorAll('input[type=checkbox]')
+  // },
 
   methods: {
     // filter(value) {

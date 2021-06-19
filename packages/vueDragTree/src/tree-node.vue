@@ -4,13 +4,10 @@
     ref="node"
     class="org-tree-node"
     :class="{
-      collapsed:!expanded,
+      collapsed: !expanded,
       'is-hidden': !node.visible,
-      'is-leaf': expanded
+      'is-leaf': expanded,
     }"
-    role="treeitem"
-    :aria-expanded="expanded"
-    :aria-disabled="node.disabled"
     :draggable="tree.draggable"
     @contextmenu="($event) => this.handleContextMenu($event)"
     @dragstart.stop="handleDragStart"
@@ -18,36 +15,38 @@
     @dragend.stop="handleDragEnd"
     @drop.stop="handleDrop"
   >
-    <div class="org-tree-node-label" ref="nodelabel">
+    <div
+      ref="nodelabel"
+      class="org-tree-node-label"
+    >
       <node-icon
         v-if="node.childNodes && node.childNodes.length > 0"
         :node="node"
       />
       <node-content :node="node" />
     </div>
-      <div
-        v-if="(!renderAfterExpand || childNodeRendered) && node.childNodes.length > 0"
-        v-show="expanded"
-        class="org-tree-node-children"
-        role="group"
-        :aria-expanded="expanded"
-      >
-        <tree-node
-          v-for="child in node.childNodes"
-          :key="getNodeKey(child)"
-          :render-content="renderContent"
-          :render-after-expand="renderAfterExpand"
-          :node="child"
-          @node-expand="handleChildNodeExpand"
-        />
-      </div>
+    <div
+      v-if="expanded && (!renderAfterExpand || childNodeRendered) && node.childNodes.length > 0"
+      class="org-tree-node-children"
+      role="group"
+      :aria-expanded="expanded"
+    >
+      <tree-node
+        v-for="child in node.childNodes"
+        :key="getNodeKey(child)"
+        :render-content="renderContent"
+        :render-after-expand="renderAfterExpand"
+        :node="child"
+        @node-expand="handleChildNodeExpand"
+      />
     </div>
+  </div>
 </template>
 
 <script>
 // import ElCollapseTransition from 'element-ui/src/transitions/collapse-transition';
 // import ElCheckbox from 'element-ui/packages/checkbox';
-import emitter from '../model/emiter'
+// import emitter from '../model/emiter'
 import { getNodeKey } from '../model/util'
 import NodeContent from './node-content'
 import NodeIcon from './node-icon'
@@ -63,10 +62,11 @@ export default {
     NodeIcon
   },
 
-  mixins: [emitter],
+  // mixins: [emitter],
 
   props: {
     node: {
+      type: Object,
       default() {
         return {}
       }
@@ -92,7 +92,6 @@ export default {
 
   watch: {
     'node.expanded'(val) {
-      console.log(this.node.expanded, this.node, val)
       this.$nextTick(() => {
         this.expanded = val
       })
@@ -100,7 +99,7 @@ export default {
         this.childNodeRendered = true
       }
     }
-   },
+  },
 
   created() {
     const parent = this.$parent
@@ -113,13 +112,14 @@ export default {
 
     const tree = this.tree
     if (!tree) {
-      console.warn('Can not find node\'s tree.')
+      console.warn("Can not find node's tree.")
     }
 
     const props = tree.props || {}
     const childrenKey = props['children'] || 'children'
-
-    this.$watch(`node.data.${childrenKey}`, () => {
+    // console.log(`node.data.${childrenKey}`)
+    this.$watch(`node.data.${childrenKey}`, (val) => {
+      console.log(val, 11)
       this.node.updateChildren()
     })
     if (this.node.expanded) {
@@ -128,7 +128,7 @@ export default {
     }
 
     if (this.tree.accordion) {
-      this.$on('tree-node-expand', node => {
+      this.$on('tree-node-expand', (node) => {
         // console.log(this.node, node)
         if (this.node !== node && this.node.childNodes.length > 0) {
           this.node.collapse()
@@ -150,53 +150,36 @@ export default {
     //   this.indeterminate = indeterminate
     // },
 
-    handleClick() {
-      const store = this.tree.store
-      store.setCurrentNode(this.node)
-      this.tree.$emit('current-change', store.currentNode ? store.currentNode.data : null, store.currentNode)
-      this.tree.currentNode = this
-      if (this.tree.expandOnClickNode) {
-        this.handleExpandIconClick()
-      }
-      // if (this.tree.checkOnClickNode && !this.node.disabled) {
-      //   this.handleCheckChange(null, {
-      //     target: { checked: !this.node.checked }
-      //   })
-      // }
-      this.tree.$emit('node-click', this.node.data, this.node, this)
-    },
+    // handleClick() {
+    //   const store = this.tree.store
+    //   store.setCurrentNode(this.node)
+    //   this.tree.$emit(
+    //     'current-change',
+    //     store.currentNode ? store.currentNode.data : null,
+    //     store.currentNode
+    //   )
+    //   this.tree.currentNode = this
+    //   if (this.tree.expandOnClickNode) {
+    //     this.handleExpandIconClick()
+    //   }
+    //   // if (!this.node.disabled) {
+    //   //   this.handleCheckChange(null, {
+    //   //     target: { checked: !this.node.checked }
+    //   //   })
+    //   // }
+    //   this.tree.$emit('node-click', this.node.data, this.node, this)
+    // },
 
     handleContextMenu(event) {
-      if (this.tree._events['node-contextmenu'] && this.tree._events['node-contextmenu'].length > 0) {
+      if (
+        this.tree._events['node-contextmenu'] &&
+        this.tree._events['node-contextmenu'].length > 0
+      ) {
         event.stopPropagation()
         event.preventDefault()
       }
       this.tree.$emit('node-contextmenu', event, this.node.data, this.node, this)
     },
-
-    handleExpandIconClick() {
-      if (this.node.isLeaf) return
-      if (this.expanded) {
-        this.tree.$emit('node-collapse', this.node.data, this.node, this)
-        this.node.collapse()
-      } else {
-        this.node.expand()
-        this.$emit('node-expand', this.node.data, this.node, this)
-      }
-    },
-
-    // handleCheckChange(value, ev) {
-    //   this.node.setChecked(ev.target.checked, !this.tree.checkStrictly)
-    //   this.$nextTick(() => {
-    //     const store = this.tree.store
-    //     this.tree.$emit('check', this.node.data, {
-    //       checkedNodes: store.getCheckedNodes(),
-    //       checkedKeys: store.getCheckedKeys(),
-    //       halfCheckedNodes: store.getHalfCheckedNodes(),
-    //       halfCheckedKeys: store.getHalfCheckedKeys()
-    //     })
-    //   })
-    // },
 
     handleChildNodeExpand(nodeData, node, instance) {
       this.broadcast('TreeNode', 'tree-node-expand', node)
