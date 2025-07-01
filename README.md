@@ -49,6 +49,11 @@ components: {
 
 [@wangdabaoqq](https://github.com/wangdabaoqq)
 
+## 赞助
+此项目的 CDN 加速和安全防护由腾讯 EdgeOne 赞助。
+[EdgeOne logo and website link](https://edgeone.ai/?from=github)
+![image](https://github.com/user-attachments/assets/b45107d2-ad54-447d-9cef-056a62b99cbb)
+
 
 ## 支持浏览器
 
